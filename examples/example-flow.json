@@ -1,0 +1,23 @@
+[
+  {
+    "id": "inject",
+    "type": "inject",
+    "name": "Sample Base64",
+    "payload": "BASE64_STRING_HERE",
+    "payloadType": "str"
+  },
+  {
+    "id": "decrypt",
+    "type": "tuya-file-decrypt",
+    "name": "Decrypt Tuya File",
+    "accessId": "",
+    "accessKey": "",
+    "endpoint": "https://openapi.tuyaeu.com",
+    "deviceId": ""
+  },
+  {
+    "id": "debug",
+    "type": "debug",
+    "name": "Output Image"
+  }
+]
