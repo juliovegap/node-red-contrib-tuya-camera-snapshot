@@ -1,0 +1,6 @@
+{
+  "bucket": "example-bucket",
+  "files": [
+    ["path/to/file", "encryptionKey"]
+  ]
+}
