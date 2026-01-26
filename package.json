@@ -12,7 +12,7 @@
     "home-assistant"
   ],
   "author": "Julio",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/juliovegap/node-red-contrib-tuya-file-decrypt.git"
