@@ -2,7 +2,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/node-red-contrib-tuya-file-decrypt.svg)](https://www.npmjs.com/package/node-red-contrib-tuya-file-decrypt)
 [![Node-RED](https://img.shields.io/badge/Node--RED-Node-blue.svg)](https://flows.nodered.org/node/node-red-contrib-tuya-file-decrypt)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/<your-user>/node-red-contrib-tuya-file-decrypt/publish.yml)](https://github.com/<your-user>/node-red-contrib-tuya-file-decrypt)
 
 A Node‑RED node that decrypts **Tuya movement‑config encrypted files** (AES‑CBC) and returns the resulting image as Base64 or binary Buffer.
