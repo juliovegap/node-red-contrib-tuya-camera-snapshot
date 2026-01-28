@@ -6,12 +6,23 @@ module.exports = function(RED) {
         const decrypt = require("./lib/decrypt");
         const tuya = require("./lib/tuya");
 
-        // Tuya context creation
-        const ctx = tuya.createContext(config);
-
         node.on("input", async function(msg) {
             try {
-                // 1. Base64 → JSON Decoding
+                // 1. Tuya Credentials Validation
+                if (!config.accessId || !config.accessKey) {
+                    node.error("Tuya credentials missing: accessId or accessKey is empty");
+                    return;
+                }
+
+                if (!config.deviceId) {
+                    node.error("Tuya deviceId is missing");
+                    return;
+                }
+
+                // Tuya context creation
+                const ctx = tuya.createContext(config)
+
+                // 2. Base64 → JSON Decoding
                 let decoded;
                 try {
                     decoded = JSON.parse(
@@ -22,7 +33,7 @@ module.exports = function(RED) {
                     return;
                 }
 
-                // 2. Minimum Length Validation
+                // 3. Minimum Length Validation
                 if (!decoded?.files || !Array.isArray(decoded.files) || decoded.files.length === 0) {
                     node.error("Invalid Tuya payload: missing 'files' array → " + JSON.stringify(decoded));
                     return;
@@ -35,7 +46,7 @@ module.exports = function(RED) {
                     return;
                 }
 
-                // 3. Real Parameter Extraction
+                // 4. Real Parameter Extraction
                 const file = entry[0];
                 let key = entry[1];
                 const bucket = decoded.bucket;
@@ -50,7 +61,7 @@ module.exports = function(RED) {
                     node.warn("AES key length is unusual (" + key.length + "): " + key);
                 }
 
-                // 4. Get real URL from Tuya Archive
+                // 5. Get real URL from Tuya Archive
                 let fileURL;
                 try {
                     fileURL = await tuya.getFileURL(ctx, config.deviceId, bucket, file);
@@ -59,7 +70,7 @@ module.exports = function(RED) {
                     return;
                 }
 
-                // 5. File Decrypt
+                // 6. File Decrypt
                 let decrypted;
                 try {
                     decrypted = await decrypt.decryptFile(fileURL, key);
