@@ -25,9 +25,11 @@ module.exports = function(RED) {
                 // 2. Base64 → JSON Decoding
                 let decoded;
                 try {
-                    decoded = JSON.parse(
-                        Buffer.from(msg.payload, "base64").toString()
-                    );
+                    if (typeof msg.payload === 'object') {
+                        decoded = msg.payload; // JSON already
+                    } else {
+                        decoded = JSON.parse(Buffer.from(msg.payload, "base64").toString()); // Base64
+                    }
                 } catch (err) {
                     node.error("Invalid Base64 or JSON payload: " + err.message);
                     return;
