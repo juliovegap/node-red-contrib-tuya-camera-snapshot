@@ -4,7 +4,20 @@ module.exports = function(RED) {
         const node = this;
 
         const decrypt = require("./lib/decrypt");
-        const tuya = require("./lib/tuya");
+
+        function buildS3URL(bucket, file, region) {
+            if (!bucket || !file) {
+                throw new Error("Missing bucket or file to build S3 URL");
+            }
+
+            const cleanFile = file.startsWith("/") ? file.slice(1) : file;
+
+            // China regions uses domain .com.cn
+            const isChina = region.startsWith("cn-");
+            const domain = isChina ? "amazonaws.com.cn" : "amazonaws.com";
+
+            return `https://${bucket}.s3.${region}.${domain}/${cleanFile}`;
+        }
 
         node.on("input", async function(msg) {
             try {
@@ -52,8 +65,8 @@ module.exports = function(RED) {
                 const file = entry[0];
                 let key = entry[1];
                 const bucket = decoded.bucket;
+                const region = config.region || "eu-central-1";
 
-                // Double Check Key String Type
                 if (typeof key !== "string") {
                     key = String(key);
                 }
@@ -63,12 +76,12 @@ module.exports = function(RED) {
                     node.warn("AES key length is unusual (" + key.length + "): " + key);
                 }
 
-                // 5. Get real URL from Tuya Archive
+                // 5. S3 Direct Access Construction
                 let fileURL;
                 try {
-                    fileURL = await tuya.getFileURL(ctx, config.deviceId, bucket, file);
+                    fileURL = buildS3URL(bucket, file, region);
                 } catch (err) {
-                    node.error("Error fetching file URL from Tuya: " + err.message);
+                    node.error("Error building S3 URL: " + err.message);
                     return;
                 }
 
@@ -86,7 +99,9 @@ module.exports = function(RED) {
                 msg.image = decrypted;
                 msg.file = file;
                 msg.bucket = bucket;
-                
+                msg.region = region;
+                msg.url = fileURL;
+
                 node.send(msg);
 
             } catch (err) {
