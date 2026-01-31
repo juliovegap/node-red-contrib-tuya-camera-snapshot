@@ -7,7 +7,7 @@
 
 A Node‑RED node that decrypts **Tuya movement‑config encrypted files** (AES‑CBC) and returns the resulting image as Base64 or binary Buffer.
 
-This is especially useful for **Tuya‑based cameras and sensors** that store encrypted snapshots or movement configuration files.
+This is especially useful for **Tuya‑based cameras and sensors** that stores encrypted snapshots or movement configuration files.
 
 ---
 
