@@ -13,8 +13,7 @@ This is especially useful for **Tuya‑based cameras and sensors** that store en
 
 ## ✨ Features
 
-- Connects to **Tuya OpenAPI**
-- Downloads encrypted movement‑config files
+- Downloads encrypted movement‑config files from S3
 - Decrypts AES‑CBC with PKCS7 padding
 - Returns the image in:
   - `msg.payload` → Base64
@@ -55,15 +54,8 @@ The node requires your Tuya Cloud credentials:
 |-------------|-------------|
 | Access ID   | Tuya Cloud Access ID |
 | Access Key  | Tuya Cloud Access Key |
-| Endpoint    | Tuya API endpoint (default: EU) |
+| Region      | Amazon S3 Region |
 | Device ID   | Device that owns the encrypted file |
-
-Supported endpoints:
-
-- `https://openapi.tuyaeu.com` (EU)
-- `https://openapi.tuyacn.com` (China)
-- `https://openapi.tuyaus.com` (US)
-- `https://openapi.tuyain.com` (India)
 
 ---
 
@@ -75,6 +67,6 @@ The node expects a **Base64 string** containing a JSON object with Tuya metadata
 {
   "bucket": "example-bucket",
   "files": [
-    ["path/to/file", "encryptionKey"]
+    ["path/to/file", "AESencryptionKey"]
   ]
 }
