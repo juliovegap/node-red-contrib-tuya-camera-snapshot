@@ -12,7 +12,7 @@ module.exports = function(RED) {
 
             const cleanFile = file.startsWith("/") ? file.slice(1) : file;
 
-            // China regions uses domain .com.cn
+            // China region uses domain .com.cn
             const isChina = region.startsWith("cn-");
             const domain = isChina ? "amazonaws.com.cn" : "amazonaws.com";
 
@@ -31,9 +31,6 @@ module.exports = function(RED) {
                     node.error("Tuya deviceId is missing");
                     return;
                 }
-
-                // Tuya context creation
-                const ctx = tuya.createContext(config)
 
                 // 2. Base64 → JSON Decoding
                 let decoded;
