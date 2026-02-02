@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-tuya-camera-snapshot",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Node-RED Tuya contribution to perform a camera snapshot.",
   "keywords": [
     "node-red",
