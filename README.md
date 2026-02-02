@@ -59,7 +59,7 @@ The node requires your Tuya Cloud credentials:
 | Access ID   | Tuya Cloud Access ID |
 | Access Key  | Tuya Cloud Access Key |
 | Endpoint    | Tuya API endpoint (default: EU) |
-| Device ID   | Device that owns the encrypted file |
+| Device ID   | Camera Enabled Device that takes snapshots |
 
 Supported endpoints:
 
