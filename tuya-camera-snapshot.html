@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('tuya-file-decrypt', {
+    RED.nodes.registerType('tuya-camera-snapshot', {
         category: 'Tuya',
         color: '#00aaff',
         defaults: {
@@ -11,14 +11,14 @@
         },
         inputs: 1,
         outputs: 1,
-        icon: "tuya-file-decrypt.svg",
+        icon: "tuya-camera-snapshot.svg",
         label: function() {
-            return this.name || "Tuya File Decrypt (S3)";
+            return this.name || "Tuya Camera Snapshot";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="tuya-file-decrypt">
+<script type="text/x-red" data-template-name="tuya-camera-snapshot">
     <div class="form-row">
         <label for="node-input-accessId"><i class="fa fa-key"></i> Access ID</label>
         <input type="text" id="node-input-accessId">
@@ -48,11 +48,11 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="tuya-file-decrypt">
+<script type="text/x-red" data-help-name="tuya-camera-snapshot">
     <p>A Node‑RED node that decrypts Tuya movement‑config encrypted files (AES‑CBC) and returns the resulting image as Base64 or binary Buffer.</p>
 </script>
 
-<script type="text/x-red" data-help-name="tuya-file-decrypt">
+<script type="text/x-red" data-help-name="tuya-camera-snapshot">
     <p>
         Node that takes a Base64-encoded Tuya JSON payload containing
         <code>bucket</code>, <code>files</code> and an AES key, builds a direct S3 URL,
