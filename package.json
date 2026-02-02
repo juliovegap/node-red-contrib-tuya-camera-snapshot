@@ -22,7 +22,7 @@
   },
   "node-red": {
     "nodes": {
-      "tuya-file-decrypt": "tuya-camera-snapshot.js"
+      "tuya-camera-snapshot": "tuya-camera-snapshot.js"
     }
   },
   "scripts": {
