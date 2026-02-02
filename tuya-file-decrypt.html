@@ -6,6 +6,7 @@
             name: {value:""},
             accessId: {value:""},
             accessKey: {value:""},
+            endpoint: {value:""},
             deviceId: {value:""}
         },
         inputs: 1,
@@ -27,7 +28,20 @@
         <label for="node-input-accessKey"><i class="fa fa-lock"></i> Access Key</label>
         <input type="text" id="node-input-accessKey">
     </div>
-   
+
+    <div class="form-row">
+    <label for="node-input-endpoint"><i class="fa fa-globe"></i> Endpoint</label>
+        <select id="node-input-endpoint">
+            <option value="https://openapi.tuyaeu.com">Central Europe Data Center</option>
+            <option value="https://openapi-weaz.tuyaeu.com">Western Europe Data Center</option>
+            <option value="https://openapi.tuyaus.com">Western America Data Center</option>
+            <option value="https://openapi-ueaz.tuyaus.com">Eastern America Data Center</option>
+            <option value="https://openapi.tuyain.com">India Data Center</option>
+            <option value="https://openapi.tuyacn.com">China Data Center</option>
+            <option value="https://openapi-sg.iotbing.com">Singapore Data Center</option>
+        </select>
+    </div>
+
     <div class="form-row">
         <label for="node-input-deviceId"><i class="fa fa-cube"></i> Device ID</label>
         <input type="text" id="node-input-deviceId">
