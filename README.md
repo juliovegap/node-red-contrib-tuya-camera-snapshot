@@ -34,17 +34,17 @@ Besides the Tuya credentials, it is **paramount** to enable the **Camera Service
 
 ### From Node‑RED Palette Manager
 
-`Menu → Manage Palette → Install → node-red-contrib-tuya-file-decrypt`
+`Menu → Manage Palette → Install → node-red-contrib-tuya-camera-snapshot`
 
 ### From NPM
 
-`npm install node-red-contrib-tuya-file-decrypt`
+`npm install node-red-contrib-tuya-camera-snapshot`
 
 ### Home Assistant (Node‑RED Add‑on)
 
 `cd /config/node-red`
 
-`npm install node-red-contrib-tuya-file-decrypt`
+`npm install node-red-contrib-tuya-camera-snapshot`
 
 Then restart the add‑on.
 
