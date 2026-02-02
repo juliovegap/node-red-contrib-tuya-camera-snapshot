@@ -4,20 +4,7 @@ module.exports = function(RED) {
         const node = this;
 
         const decrypt = require("./lib/decrypt");
-
-        function buildS3URL(bucket, file, region) {
-            if (!bucket || !file) {
-                throw new Error("Missing bucket or file to build S3 URL");
-            }
-
-            const cleanFile = file.startsWith("/") ? file.slice(1) : file;
-
-            // China region uses domain .com.cn
-            const isChina = region.startsWith("cn-");
-            const domain = isChina ? "amazonaws.com.cn" : "amazonaws.com";
-
-            return `https://${bucket}.s3.${region}.${domain}/${cleanFile}`;
-        }
+        const tuya = require("./lib/tuya");
 
         node.on("input", async function(msg) {
             try {
@@ -32,7 +19,10 @@ module.exports = function(RED) {
                     return;
                 }
 
+                const ctx = tuya.createContext(config);
+
                 // 2. Base64 → JSON Decoding
+                let key = "";
                 let decoded;
                 try {
                     if (typeof msg.payload === 'object') {
@@ -40,69 +30,74 @@ module.exports = function(RED) {
                     } else {
                         decoded = JSON.parse(Buffer.from(msg.payload, "base64").toString()); // Base64
                     }
+
+                    // Tuya standar structure key check
+                    if (decoded && decoded.files && Array.isArray(decoded.files) && decoded.files.length > 0) {
+                         // Fromat: files: [ ["path", "KEY"] ]
+                         key = decoded.files[0][1];
+                    } else if (typeof decoded === 'object' && decoded.local_key) {
+                         // Alternative support if local_key is manually set
+                         key = decoded.local_key;
+                    }
                 } catch (err) {
-                    node.error("Invalid Base64 or JSON payload: " + err.message);
+                    node.error("Key cannot be automatically extracted: " + err.message);
                     return;
                 }
 
-                // 3. Minimum Length Validation
-                if (!decoded?.files || !Array.isArray(decoded.files) || decoded.files.length === 0) {
-                    node.error("Invalid Tuya payload: missing 'files' array → " + JSON.stringify(decoded));
-                    return;
-                }
-
-                const entry = decoded.files[0];
+                // Convert key to a string
+                key = String(key)
                 
-                if (!Array.isArray(entry) || entry.length < 2) {
-                    node.error("Invalid Tuya file entry: " + JSON.stringify(entry));
-                    return;
-                }
-
-                // 4. Real Parameter Extraction
-                const file = entry[0];
-                let key = entry[1];
-                const bucket = decoded.bucket;
-                const region = config.region || "eu-central-1";
-
-                if (typeof key !== "string") {
-                    key = String(key);
-                }
-
-                // AES Length Optional Validation
-                if (key.length !== 16 && key.length !== 24 && key.length !== 32) {
-                    node.warn("AES key length is unusual (" + key.length + "): " + key);
-                }
-
-                // 5. S3 Direct Access Construction
-                let fileURL;
+                // 3. Recent URL search
+                node.status({fill:"blue", shape:"dot", text:"Logs check..."});
+                
+                let fileUrls = [];
                 try {
-                    fileURL = buildS3URL(bucket, file, region);
+                    fileUrls = await tuya.getRecentFiles(ctx, config.deviceId);
+                    node.log(`There was found ${fileUrls.length} recent images.`);
                 } catch (err) {
-                    node.error("Error building S3 URL: " + err.message);
+                    node.status({fill:"red", shape:"ring", text:"Error API Tuya"});
+                    node.error(err.message);
                     return;
                 }
+                
+                // 4. Each Picture Process
+                let successCount = 0;
+                
+                for (let i = 0; i < fileUrls.length; i++) {
+                    const url = fileUrls[i];
+                    node.status({fill:"yellow", shape:"ring", text:`Download ${i+1}/${fileUrls.length}...`});
 
-                // 6. File Decrypt
-                let decrypted;
-                try {
-                    decrypted = await decrypt.decryptFile(fileURL, key);
-                } catch (err) {
-                    node.error("Error decrypting file: " + err.message);
-                    return;
+                    try {
+                        const decryptedBuffer = await decrypt.decryptFile(url, key);
+                        
+                        // Just message clone to manage several pictures output
+                        let newMsg = RED.util.cloneMessage(msg);
+                        
+                        newMsg.payload = decryptedBuffer.toString("base64"); // Dashboard Base64 picture
+                        newMsg.image = decryptedBuffer; // Disk write binary buffer
+                        newMsg.fileUrl = url;
+                        newMsg.imageIndex = i + 1;
+                        newMsg.totalImages = fileUrls.length;
+                        
+                        // Send individual messages
+                        node.send(newMsg);
+                        successCount++;
+                        
+                    } catch (decryptErr) {
+                        node.warn(`Error processsing imagen ${i+1}: ${decryptErr.message}`);
+                        // Don't return yet. Let's try another picture
+                    }
                 }
 
-                // 6. Final Output
-                msg.payload = decrypted.toString("base64");
-                msg.image = decrypted;
-                msg.file = file;
-                msg.bucket = bucket;
-                msg.region = region;
-                msg.url = fileURL;
-
-                node.send(msg);
+                if (successCount > 0) {
+                    node.status({fill:"green", shape:"dot", text:`Success (${successCount}/${fileUrls.length})`});
+                } else {
+                    node.status({fill:"red", shape:"dot", text:"Total fail"});
+                }
 
             } catch (err) {
                 node.error("Unexpected error: " + err.message);
+                node.status({fill:"red", shape:"dot", text:"Error"});
             }
         });
     }
