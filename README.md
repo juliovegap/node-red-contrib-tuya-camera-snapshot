@@ -5,7 +5,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/<your-user>/node-red-contrib-tuya-file-decrypt/publish.yml)](https://github.com/<your-user>/node-red-contrib-tuya-file-decrypt)
 
-A Node‑RED node that call Tuya Open API to perform a camera snapshot, decrypts **Tuya encrypted picture** (AES‑CBC) and returns the resulting image as Base64 or binary Buffer.
+A Node‑RED node that call Tuya Open API to perform a **camera snapshot**, decrypts **Tuya encrypted picture** (AES‑CBC) and returns the resulting image as Base64 or binary Buffer.
 
 This is especially useful for **Tuya‑based cameras and sensors** like doorbells, which are motion sensor activated.
 
