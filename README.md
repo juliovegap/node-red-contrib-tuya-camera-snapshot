@@ -9,7 +9,7 @@ A Node‑RED node that call Tuya Open API to perform a **camera snapshot**, decr
 
 This is especially useful for **Tuya‑based cameras and sensors** like doorbells, which are motion sensor activated.
 
-Besides the Tuya credentials, it is **paramount** to enable the **Camera Service** Tuya API on your Tuya IOT Platform (Cloud -> <Your Project> -> Service API and ativate "Camera Service")
+Besides the Tuya credentials, it is **paramount** to enable the **Camera Service** Tuya API on your Tuya IOT Platform (Cloud -> [Your Project] -> Service API and ativate "Camera Service")
 
 ---
 
