@@ -5,15 +5,19 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/<your-user>/node-red-contrib-tuya-file-decrypt/publish.yml)](https://github.com/<your-user>/node-red-contrib-tuya-file-decrypt)
 
-A Node‑RED node that decrypts **Tuya movement‑config encrypted files** (AES‑CBC) and returns the resulting image as Base64 or binary Buffer.
+A Node‑RED node that call Tuya Open API to perform a camera snapshot, decrypts **Tuya encrypted picture** (AES‑CBC) and returns the resulting image as Base64 or binary Buffer.
 
-This is especially useful for **Tuya‑based cameras and sensors** that stores encrypted snapshots or movement configuration files.
+This is especially useful for **Tuya‑based cameras and sensors** like doorbells, which are motion sensor activated.
+
+Besides the Tuya credentials, it is **paramount** to enable the **Camera Service** Tuya API on your Tuya IOT Platform (Cloud -> <Your Project> -> Service API and ativate "Camera Service")
 
 ---
 
 ## ✨ Features
 
-- Downloads encrypted movement‑config files from S3
+- Connects to **Tuya OpenAPI**
+- Calls the **Capture An Image** Camera Service API
+- Downloads encrypted picture files
 - Decrypts AES‑CBC with PKCS7 padding
 - Returns the image in:
   - `msg.payload` → Base64
@@ -39,8 +43,8 @@ This is especially useful for **Tuya‑based cameras and sensors** that stores e
 ### Home Assistant (Node‑RED Add‑on)
 
 `cd /config/node-red`
-`npm install node-red-contrib-tuya-file-decrypt`
 
+`npm install node-red-contrib-tuya-file-decrypt`
 
 Then restart the add‑on.
 
@@ -54,19 +58,12 @@ The node requires your Tuya Cloud credentials:
 |-------------|-------------|
 | Access ID   | Tuya Cloud Access ID |
 | Access Key  | Tuya Cloud Access Key |
-| Region      | Amazon S3 Region |
+| Endpoint    | Tuya API endpoint (default: EU) |
 | Device ID   | Device that owns the encrypted file |
 
----
+Supported endpoints:
 
-## 📥 Input Format
-
-The node expects a **Base64 string** containing a JSON object with Tuya metadata:
-
-```json
-{
-  "bucket": "example-bucket",
-  "files": [
-    ["path/to/file", "AESencryptionKey"]
-  ]
-}
+- `https://openapi.tuyaeu.com` (EU)
+- `https://openapi.tuyacn.com` (China)
+- `https://openapi.tuyaus.com` (US)
+- `https://openapi.tuyain.com` (India)
