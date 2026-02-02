@@ -1,4 +1,4 @@
-# node-red-contrib-tuya-file-decrypt
+# node-red-contrib-tuya-camera-snapshot
 
 [![NPM Version](https://img.shields.io/npm/v/node-red-contrib-tuya-file-decrypt.svg)](https://www.npmjs.com/package/node-red-contrib-tuya-file-decrypt)
 [![Node-RED](https://img.shields.io/badge/Node--RED-Node-blue.svg)](https://flows.nodered.org/node/node-red-contrib-tuya-file-decrypt)
