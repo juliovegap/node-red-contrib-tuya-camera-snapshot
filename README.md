@@ -11,6 +11,8 @@ This is especially useful for **Tuya‑based cameras and sensors** like doorbell
 
 Besides the Tuya credentials, it is **paramount** to enable the **Camera Service** Tuya API on your Tuya IOT Platform (Cloud -> [Your Project] -> Service API and ativate "Camera Service")
 
+Based on 'How To Parse IPC movement_detect_pic Data' Tuya Support Help (https://support.tuya.com/en/help/_detail/Kbfus79b0gcpi)
+
 ---
 
 ## ✨ Features
